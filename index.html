@@ -196,6 +196,16 @@
             transform: translateY(0);
         }
 
+        
+        .profile-photo {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid rgba(255,255,255,0.15);
+            margin-bottom: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+        }
         @media (max-width: 768px) {
             .hero h1 { font-size: 40px; }
             .grid { grid-template-columns: 1fr; }
@@ -213,6 +223,7 @@
     </nav>
 
     <header class="hero" id="home">
+    <img src="./src/assets/profile-image.svg" alt="Dhvanil Barot" class="profile-photo animate__animated animate__fadeIn">
         <h1 class="animate__animated animate__fadeInUp">Dhvanil Barot</h1>
         <h2 class="animate__animated animate__fadeInUp animate__delay-1s">Construction Management & Project Engineer</h2>
         <p class="animate__animated animate__fadeInUp animate__delay-2s">Graduate student at ASU specializing in MEP, infrastructure, and sustainable project delivery.</p>
