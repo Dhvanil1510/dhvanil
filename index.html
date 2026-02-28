@@ -19,26 +19,26 @@
         }
 
         /* Apple-style Navigation */
-        .navbar {
-            position: sticky;
-            top: 0;
-            width: 100%;
-            height: 95px;
-            background: rgba(0, 0, 0, 1);
-            backdrop-filter: saturate(180%) blur(20px);
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+      .navbar {
+  position: sticky;
+  top: 0;
+  height: 100px;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-        .nav-content {
+.nav-content {
+  width: 100%;
+  max-width: 980px;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-/* navbar name (start hidden) */
+/* name in navbar (starts hidden) */
 .nav-name {
   color: #f5f5f7;
   font-size: 22px;
@@ -48,8 +48,9 @@
   transition: opacity 0.3s ease;
 }
 
-/* hero title (start visible) */
+/* hero title (starts visible) */
 .hero-title {
+  color: #f5f5f7;
   opacity: 1;
   transition: opacity 0.3s ease;
 }
@@ -62,6 +63,7 @@
 .hero-title.hidden {
   opacity: 0;
 }
+
 
         
 
@@ -328,6 +330,26 @@
         }
     </style>
 </head>
+    <script>
+  window.addEventListener('scroll', function () {
+    const hero = document.querySelector('.hero-section');
+    const navName = document.querySelector('.nav-name');
+    const heroTitle = document.querySelector('.hero-title');
+    if (!hero || !navName || !heroTitle) return;
+
+    const heroBottom = hero.getBoundingClientRect().bottom;
+    const navbarHeight = document.querySelector('.navbar').offsetHeight;
+
+    if (heroBottom <= navbarHeight) {
+      navName.classList.add('visible');
+      heroTitle.classList.add('hidden');
+    } else {
+      navName.classList.remove('visible');
+      heroTitle.classList.remove('hidden');
+    }
+  });
+</script>
+
 <body>
     <!-- Apple-style Navigation -->
   <nav class="navbar">
