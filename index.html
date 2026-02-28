@@ -187,11 +187,15 @@
             color: #a1a1a6;
         }
 
-        .hero-name {
-  position: sticky;
-  top: 1;              /* sticks when it hits top */
+   .hero-name {
+  position: fixed;
+  top: 60px;              /* adjust so it sits under the navbar */
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 10000;
+  pointer-events: none;   /* optional so it doesn't block clicks */
 }
+
 
         /* Skills Grid */
         .skills-grid {
