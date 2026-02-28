@@ -86,6 +86,17 @@
             margin-bottom: 10px;
         }
 
+        .profile-photo {
+           /* keep your size if you want */
+                width: 110mm;
+               height: 150mm;
+             object-fit: cover;
+
+            /* fade edges to transparent, center stays fully visible */
+           -webkit-mask-image: radial-gradient(circle, black 60%, transparent 100%);
+           mask-image: radial-gradient(circle, black 60%, transparent 100%);
+          }
+
         .hero-section p {
             font-size: 28px;
             line-height: 1.14286;
@@ -292,13 +303,12 @@
     </nav>
 
     <section class="hero-section">
-    <img
-        src="src/assets/photo.jpg"
-        alt="Dhvanil Barot"
-        class="profile-photo"
-        id="profilePhoto"
-        style="width: 110mm; height: 150mm;"
-    >
+   
+        <img src="src/assets/photo.jpg"
+     alt="Dhvanil Barot"
+     class="profile-photo"
+     id="profilePhoto">
+
     <h1>Dhvanil Barot</h1>
     <p>Construction Management & Project Engineer</p>
     <p style="font-size: 21px; max-width: 600px; text-align: center;">
