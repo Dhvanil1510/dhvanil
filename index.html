@@ -527,6 +527,45 @@ e􀆯iciency.
     }, 3000);
   });
 </script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const slider = document.getElementById('skillsSlider');
+    const cards = slider ? slider.querySelectorAll('.skill-card') : [];
+    if (!slider || !cards.length) return;
+
+    let index = 0;
+
+    function scrollToCard(i) {
+      const card = cards[i];
+      card.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+
+      cards.forEach((c, idx) => {
+        c.classList.toggle('active', idx === i);
+      });
+    }
+
+    scrollToCard(index);
+
+    // handle wheel scroll only while we are not on last card going down
+    slider.addEventListener('wheel', function (e) {
+      const atLastCard = index === cards.length - 1 && e.deltaY > 0;
+      const atFirstCard = index === 0 && e.deltaY < 0;
+
+      // If still in the middle of the slider, use wheel to move cards
+      if (!atLastCard && !atFirstCard) {
+        e.preventDefault(); // stop page from scrolling
+        if (e.deltaY > 0 && index < cards.length - 1) {
+          index++;
+        } else if (e.deltaY < 0 && index > 0) {
+          index--;
+        }
+        scrollToCard(index);
+      }
+      // When at last (scrolling down) or first (scrolling up), 
+      // let the page scroll naturally (no preventDefault).
+    }, { passive: false });
+  });
+</script>
 
 </body>
 </html>
