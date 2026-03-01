@@ -245,19 +245,13 @@
   padding: 40px 0;
   max-width: 980px;
   margin: 0 auto;
-
-  /* hide scrollbar but keep functionality */
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
+.skills-slider::-webkit-scrollbar { display: none; }
 
-.skills-slider::-webkit-scrollbar {
-  display: none;
-}
-
-/* cards in one line, centered on snap */
 .skills-slider .skill-card {
-  flex: 0 0 260px;              /* each card width */
+  flex: 0 0 260px;
   scroll-snap-align: center;
   background: #f5f5f7;
   border-radius: 18px;
@@ -266,9 +260,12 @@
   transition: transform 0.3s, box-shadow 0.3s;
 }
 
-/* optional: focused card pops a bit */
+/* spiral-ish effect: cards slightly rotated, active one straight */
+.skills-slider .skill-card { transform: rotate(-4deg); }
+.skills-slider .skill-card:nth-child(even) { transform: rotate(4deg); }
+
 .skills-slider .skill-card.active {
-  transform: scale(1.05);
+  transform: scale(1.05) rotate(0deg);
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
 }
 
@@ -378,45 +375,22 @@ infrastructure or Project management.
    
 
     <!-- Technical Prowess Section -->
-   <section class="feature-section light" id="skills">
+ <section class="feature-section light" id="skills">
   <h2>Technical Prowess</h2>
   <p class="subtitle">Powerful tools. Powerful results.</p>
 
   <div class="skills-slider" id="skillsSlider">
-    <div class="skill-card"> <!-- 1 -->
-      <h3>Procore</h3>
-      <p>Project Management</p>
-    </div>
-    <div class="skill-card"> <!-- 2 -->
-      <h3>Bluebeam</h3>
-      <p>Document Control</p>
-    </div>
-    <div class="skill-card"> <!-- 3 -->
-      <h3>AutoCAD</h3>
-      <p>Design & Drafting</p>
-    </div>
-    <div class="skill-card"> <!-- 4 -->
-      <h3>Revit</h3>
-      <p>BIM Modeling</p>
-    </div>
-    <div class="skill-card"> <!-- 5 -->
-      <h3>BIM</h3>
-      <p>Building Information</p>
-    </div>
-    <div class="skill-card"> <!-- 6 -->
-      <h3>OSHA 30</h3>
-      <p>Safety Certified</p>
-    </div>
-    <div class="skill-card"> <!-- 7 -->
-      <h3>LEED</h3>
-      <p>Sustainability</p>
-    </div>
-    <div class="skill-card"> <!-- 8 -->
-      <h3>MEP</h3>
-      <p>Mechanical</p>
-    </div>
+    <div class="skill-card"><h3>Procore</h3><p>Project Management</p></div>
+    <div class="skill-card"><h3>Bluebeam</h3><p>Document Control</p></div>
+    <div class="skill-card"><h3>AutoCAD</h3><p>Design & Drafting</p></div>
+    <div class="skill-card"><h3>Revit</h3><p>BIM Modeling</p></div>
+    <div class="skill-card"><h3>BIM</h3><p>Building Information</p></div>
+    <div class="skill-card"><h3>OSHA 30</h3><p>Safety Certified</p></div>
+    <div class="skill-card"><h3>LEED</h3><p>Sustainability</p></div>
+    <div class="skill-card"><h3>MEP</h3><p>Mechanical</p></div>
   </div>
 </section>
+
 
 
     <!-- Projects Section -->
@@ -528,58 +502,56 @@ e􀆯iciency.
   });
 </script>
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const slider = document.getElementById('skillsSlider');
-    const cards  = slider ? slider.querySelectorAll('.skill-card') : [];
-    const skillsSection = document.getElementById('skills');
-    if (!slider || !cards.length || !skillsSection) return;
+document.addEventListener('DOMContentLoaded', function () {
+  const skillsSection = document.getElementById('skills');
+  const slider        = document.getElementById('skillsSlider');
+  const cards         = slider ? slider.querySelectorAll('.skill-card') : [];
+  if (!skillsSection || !slider || !cards.length) return;
 
-    let index = 0;
-    let locked = false; // whether we are currently intercepting scroll for this section
+  let index = 0;
+  let pinned = false;   // whether scroll is currently controlling the cards
 
-    function scrollToCard(i) {
-      const card = cards[i];
-      card.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-      cards.forEach((c, idx) => c.classList.toggle('active', idx === i));
+  function scrollToCard(i) {
+    const card = cards[i];
+    card.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    cards.forEach((c, idx) => c.classList.toggle('active', idx === i));
+  }
+
+  scrollToCard(index);
+
+  function shouldPinSection() {
+    const rect = skillsSection.getBoundingClientRect();
+    const vh   = window.innerHeight || document.documentElement.clientHeight;
+    const mid  = rect.top + rect.height / 2;
+    // when section middle is near viewport middle, activate spiral
+    return mid > vh * 0.3 && mid < vh * 0.7;
+  }
+
+  window.addEventListener('wheel', function (e) {
+    const wantPin = shouldPinSection();
+
+    if (!pinned && !wantPin) return;  // normal scroll outside “active” zone
+
+    const goingDown = e.deltaY > 0;
+    const atLast  = index === cards.length - 1;
+    const atFirst = index === 0;
+
+    if (wantPin && ((!atLast && goingDown) || (!atFirst && !goingDown))) {
+      // Enter/keep pin mode and use scroll to change cards
+      pinned = true;
+      e.preventDefault();   // stop page scroll
+      if (goingDown && index < cards.length - 1) index++;
+      if (!goingDown && index > 0) index--;
+      scrollToCard(index);
+    } else {
+      // We’re at first/last card OR section moved out of middle -> unpin, allow page scroll
+      pinned = false;
+      // no preventDefault here
     }
-
-    scrollToCard(index);
-
-    function isSectionInView() {
-      const rect = skillsSection.getBoundingClientRect();
-      const vh = window.innerHeight || document.documentElement.clientHeight;
-      // section enters "pin" mode when its top reaches near top of viewport
-      return rect.top <= 80 && rect.bottom >= vh * 0.4;
-    }
-
-    window.addEventListener('wheel', function (e) {
-      const inView = isSectionInView();
-
-      // if not in view and not locked, let page scroll normally
-      if (!inView && !locked) return;
-
-      const goingDown = e.deltaY > 0;
-      const atLast  = index === cards.length - 1;
-      const atFirst = index === 0;
-
-      // if we're in the section and not at an edge, lock and move cards instead of page
-      if (inView && ((!atLast && goingDown) || (!atFirst && !goingDown))) {
-        locked = true;
-        e.preventDefault();  // stop page scroll
-        if (goingDown && index < cards.length - 1) {
-          index++;
-        } else if (!goingDown && index > 0) {
-          index--;
-        }
-        scrollToCard(index);
-      } else {
-        // we reached last card going down or first card going up: unlock and allow page scroll
-        locked = false;
-        // do NOT preventDefault here so the page continues
-      }
-    }, { passive: false });
-  });
+  }, { passive: false });
+});
 </script>
+
 
 
 
