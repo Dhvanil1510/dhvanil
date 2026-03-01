@@ -535,6 +535,7 @@ e􀆯iciency.
     if (!slider || !cards.length || !skillsSection) return;
 
     let index = 0;
+    let locked = false; // whether we are currently intercepting scroll for this section
 
     function scrollToCard(i) {
       const card = cards[i];
@@ -547,32 +548,39 @@ e􀆯iciency.
     function isSectionInView() {
       const rect = skillsSection.getBoundingClientRect();
       const vh = window.innerHeight || document.documentElement.clientHeight;
-      // section is considered "active" when its middle is in the viewport
-      const sectionMiddle = rect.top + rect.height / 2;
-      return sectionMiddle > 0 && sectionMiddle < vh;
+      // section enters "pin" mode when its top reaches near top of viewport
+      return rect.top <= 80 && rect.bottom >= vh * 0.4;
     }
 
     window.addEventListener('wheel', function (e) {
-      if (!isSectionInView()) return;  // let page scroll normally
+      const inView = isSectionInView();
 
+      // if not in view and not locked, let page scroll normally
+      if (!inView && !locked) return;
+
+      const goingDown = e.deltaY > 0;
       const atLast  = index === cards.length - 1;
       const atFirst = index === 0;
 
-      // when in middle cards, hijack scroll
-      if (!atLast && e.deltaY > 0) {
-        e.preventDefault();
-        index++;
+      // if we're in the section and not at an edge, lock and move cards instead of page
+      if (inView && ((!atLast && goingDown) || (!atFirst && !goingDown))) {
+        locked = true;
+        e.preventDefault();  // stop page scroll
+        if (goingDown && index < cards.length - 1) {
+          index++;
+        } else if (!goingDown && index > 0) {
+          index--;
+        }
         scrollToCard(index);
-      } else if (!atFirst && e.deltaY < 0) {
-        e.preventDefault();
-        index--;
-        scrollToCard(index);
+      } else {
+        // we reached last card going down or first card going up: unlock and allow page scroll
+        locked = false;
+        // do NOT preventDefault here so the page continues
       }
-      // when at first and scrolling up, or at last and scrolling down,
-      // do NOT preventDefault so page can scroll.
     }, { passive: false });
   });
 </script>
+
 
 
 </body>
