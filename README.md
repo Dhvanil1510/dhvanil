@@ -94,5 +94,5 @@ Graduate student in Construction Management with 2 years of experience in projec
 <p align="center">
   <img src="https://img.shields.io/badge/Open%20to-Full%20Time%20Opportunities-brightgreen?style=flat-square">
   <img src="https://img.shields.io/badge/Location-Tempe%2C%20AZ-blue?style=flat-square">
-  <img src="https://img.shields.io/badge/Built%20with-%E2%9D%A4%EF%B8%8F-red?style=flat-square">
+  <img src="https://img.shields.io/badge/Built%20with-%E2%9D%A4%EF%B8%8F-white?style=flat-square">
 </p>
