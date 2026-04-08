@@ -146,7 +146,33 @@ nav.stuck{padding:1rem clamp(1.5rem,6vw,5rem);background:rgba(15,15,15,.93);back
    EXPERIENCE
 ══════════════════════════════════════════ */
 #experience{padding:9rem clamp(1.5rem,6vw,5rem);background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-.exp-head{display:grid;grid-template-columns:1fr 2fr;gap:4rem;margin-bottom:5rem;align-items:end}
+.exp-head{
+  display:grid;
+  grid-template-columns:1fr 1.4fr;
+  gap:3rem;
+  margin-bottom:5rem;
+  align-items:start;
+}
+
+.exp-intro{
+  font-size:1rem;
+  color:var(--text-2);
+  line-height:1.75;
+  font-weight:300;
+  max-width:760px;
+}
+
+.exp-crane-wrap{
+  display:flex;
+  justify-content:flex-start;
+  align-items:flex-start;
+  margin-top:1.5rem;
+}
+
+.exp-crane-wrap svg{
+  width:140px;
+  opacity:.55;
+}
 .exp-intro{font-size:1rem;color:var(--text-2);line-height:1.75;font-weight:300}
 .exp-item{display:grid;grid-template-columns:220px 1fr;gap:3rem;padding:2.5rem 0;border-bottom:1px solid var(--line);transition:background .3s,padding .3s}
 .exp-item:first-child{border-top:1px solid var(--line)}
